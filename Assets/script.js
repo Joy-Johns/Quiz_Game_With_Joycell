@@ -41,6 +41,13 @@ function showQuestion() {
     let questionEl = document.querySelector(".questions");
 
     questionEl.textContent = " seconds  till holaa ..";
+    //document.getElementById("button").style.display = "block";
+    document.getElementById("buttonID").style.display = 'none';
+    document.getElementsByClassName("choices")[0].style.display = 'block';
+    document.getElementsByClassName("choices")[1].style.display = 'block';
+    document.getElementsByClassName("choices")[2].style.display = 'block';
+    document.getElementsByClassName("choices")[3].style.display = 'block';
 
 }
 themeSwitcher.addEventListener("click", showQuestion);
+
