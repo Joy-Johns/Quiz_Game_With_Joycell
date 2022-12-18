@@ -36,6 +36,10 @@ let question = [
         correct : "D"
 }];
 
+var timerElement = document.querySelector(".timer");
+var timerCount =30;
+var timer; 
+
 let listquestions = ["Which tag is used to link a JavaScript file to HTML files?","Where should your JavaScript file be linked in HTML?",
 "How do you make comments in JavaScript?","What operator is used to assign a variable in JavaScript?",
 "How do you create an array in JavaScript?"];
@@ -48,12 +52,21 @@ let answers4 = ["var fruit = apple, pear, banana","var fruit = [apple, pear, ban
 let answer= "";
 //Buttons
 let startQuiz = document.querySelector(".button");
-let choice0 = document.querySelector(".choices");
+let resetEl = document.querySelector("#resetId");
+let choice0 = document.querySelector("#choice0");
 let choice1 = document.querySelector("#choice1");
 let choice2 = document.querySelector("#choice2");
 let choice3 = document.querySelector("#choice3");
 
+//var when you loose 1 questions
+var isLoose ="";
 
+//total games lost or win
+var gamesLost=0;
+var gamesWin =0;
+
+//right questions
+var rightAnswer=0;
 let numberquestion =0;
 
 function aver()
@@ -64,13 +77,15 @@ function checkAnswers(question, choice)
 {
     let answerEl = document.querySelector("#answer");
     let answer="";
+    console.log("Your choice " +choice);
+    console.log("Your question " +question);
+
     if (question===0){
         if (choice===0){
             console.log("Correct");
             answer = "Correct";}
         else{
             console.log("Wrong");
-
             answer =  "Wrong";}
     }
     else if (question ===1){
@@ -88,6 +103,8 @@ function checkAnswers(question, choice)
         else{answer =  "Wrong";}
     }
     answerEl.textContent = answer;
+    if(answer==="Wrong"){isLoose = true;}
+    else {isLoose = false;}
 }
 function answersLists(x){
 
@@ -119,29 +136,126 @@ function questionandAnswer(){
     let questionEl = document.querySelector(".questions");
     console.log(answers0[0]);
     questionEl.textContent = listquestions[numberquestion];
-    //document.getElementById("button").style.display = "block";
+
+    //Make dissapear the button
     document.getElementById("buttonID").style.display = 'none';
+
+    //Show four buttons with the different options
     document.getElementsByClassName("choices")[0].style.display = 'block';
-    var button1 =  document.getElementsByClassName("choices")[0];
-    button1.innerHTML = (answersLists(numberquestion))[0];
+    document.getElementsByClassName("choices")[0].innerHTML = (answersLists(numberquestion))[0];
 
     document.getElementsByClassName("choices")[1].style.display = 'block';
     document.getElementsByClassName("choices")[1].innerHTML = (answersLists(numberquestion))[1];
     
-    console.log("segundo elemento "+ answersLists(numberquestion));
     document.getElementsByClassName("choices")[2].style.display = 'block';
     document.getElementsByClassName("choices")[2].innerHTML = answersLists(numberquestion)[2];
 
     document.getElementsByClassName("choices")[3].style.display = 'block';
     document.getElementsByClassName("choices")[3].innerHTML = answersLists(numberquestion)[3];
     
-
+    //numberquestion++;
 
 
 }
+function winGame(){
+    gamesWin++;
 
-startQuiz.addEventListener("click", questionandAnswer);
+    //Make appear the button
+    document.getElementById("buttonID").style.display = 'block';
+    document.getElementsByClassName("choices")[0].style.display = 'none';
+    document.getElementsByClassName("choices")[1].style.display = 'none';
+    document.getElementsByClassName("choices")[2].style.display = 'none';
+    document.getElementsByClassName("choices")[3].style.display = 'none';
+    let answerEl = document.querySelector("#answer");
+    let answer="You have Win";
+    answerEl.textContent = answer;
 
+    let winEl = document.querySelector("#winId");
+    winEl.textContent = "Win: "+gamesWin;
+    console.log("You have win");
+}
+function loseGame(){
+
+    gamesLost++;
+    document.getElementsByClassName("choices")[0].style.display = 'none';
+    document.getElementsByClassName("choices")[1].style.display = 'none';
+    document.getElementsByClassName("choices")[2].style.display = 'none';
+    document.getElementsByClassName("choices")[3].style.display = 'none';
+    let answerEl = document.querySelector("#answer");
+    let answer="You have Lost";
+    answerEl.textContent = answer;
+    let lostEl = document.querySelector("#loostId");
+    lostEl.textContent = "Lost: "+gamesLost;
+    console.log("You have lost");
+
+}
+// The setTimer function starts and stops the timer and triggers winGame() and loseGame()
+function startTimer() {
+    // Sets timer
+    timer = setInterval(function() {
+        timerCount--;
+        timerElement.textContent = timerCount;
+        if (timerCount >= 0) {
+        // Tests if win condition is met
+            if (isLoose === true) {
+                // Clears interval and stops timer
+                timerCount = timerCount -5;
+                isLoose="";
+                numberquestion++;
+                questionandAnswer();
+            }
+            else if (isLoose === false){
+                numberquestion++;
+                isLoose ="";
+                rightAnswer++;
+                questionandAnswer();
+            }
+        
+        }
+        if ((timerCount === 0) || (timerCount < 0)){
+            // Clears interval
+            clearInterval(timer);
+            timerElement.textContent = 0;
+            loseGame();
+        }
+        if (numberquestion===5){
+            clearInterval(timer);
+            timerElement.textContent = 30;
+            if (rightAnswer>2){
+                winGame();
+            }
+            else{
+                loseGame();
+            }
+        }
+    }, 1000);
+}
+
+function reset(){
+    gamesLost=0;
+    gamesWin =0;
+    //Make appear the button
+    document.getElementById("buttonID").style.display = 'block';
+    document.getElementsByClassName("choices")[0].style.display = 'none';
+    document.getElementsByClassName("choices")[1].style.display = 'none';
+    document.getElementsByClassName("choices")[2].style.display = 'none';
+    document.getElementsByClassName("choices")[3].style.display = 'none';
+    let winEl = document.querySelector("#winId");
+    winEl.textContent = "Win: 0";
+    let lostEl = document.querySelector("#loostId");
+    lostEl.textContent = "Lost: 0";
+}
+
+function init(){
+    rightAnswer=0;
+    timerCount =30;
+    questionandAnswer();
+    startTimer();
+}
+
+
+startQuiz.addEventListener("click", init);
+resetEl.addEventListener("click", reset);
 
 choice0.addEventListener("click", function(){
     checkAnswers(numberquestion,0) 
