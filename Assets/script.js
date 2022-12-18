@@ -193,7 +193,7 @@ function winGame(){
     questionEl.textContent = "";    //remove the question from the screen
     hideChoicebuttons();           //4 choice button hidden
     let answerEl = document.querySelector("#answer");
-    let answer="You have Win";
+    let answer="You've Won!";
     answerEl.textContent = answer;
 
     let winEl = document.querySelector("#winId");
@@ -210,7 +210,7 @@ function loseGame(){
     document.getElementById("buttonID").style.display = 'block';
     questionEl.textContent = "";
     let answerEl = document.querySelector("#answer");
-    let answer="You have Lost";
+    let answer="You've Lost";
     answerEl.textContent = answer;                      //It shows that you have lost
     let lostEl = document.querySelector("#loostId");
     lostEl.textContent = "Lost: "+gamesLost;            //It shows the total times that you have lost
