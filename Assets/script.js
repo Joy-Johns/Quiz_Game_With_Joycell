@@ -35,3 +35,12 @@ let question = [
         choiceD : "var fruit = [“apple”, “pear”, “banana”]",
         correct : "D"
 }];
+var themeSwitcher = document.querySelector(".button");
+
+function showQuestion() {
+    let questionEl = document.querySelector(".questions");
+
+    questionEl.textContent = " seconds  till holaa ..";
+
+}
+themeSwitcher.addEventListener("click", showQuestion);
