@@ -252,13 +252,13 @@ function startTimer() {
     }, 1000);// The units are miliseconds so after putting 1,000 we can work using seconds
 }
 
-//This function resets the winings and loosing scores
+//This function resets the winings and loosing scores 
 function reset(){
     gamesLost=0;
     gamesWin =0;
     //Make appear the button for begin quiz
     document.getElementById("buttonID").style.display = 'block';
-    hideChoicebuttons();        //Hide the choices button
+    hideChoicebuttons();        //Hide the choices buttons
     //Put all text show on screen to 0
     let winEl = document.querySelector("#winId");
     winEl.textContent = "Win: 0";
