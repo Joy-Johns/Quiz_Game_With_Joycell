@@ -48,19 +48,18 @@ let newuser=["JJ",8];
 ///score
 
 
-//This function is executed just when we win
-//It will ask you your name and if you score is higher that 1 of the top 3 it will put you on
-//the list
+//This function is executed only when we win
+//It'll ask you your name and if you score is higher that 1 of the top 3 it will put you on the list
 function score(){
     let userScore = (rightAnswers*3)-(wrongAnswers*2);// calculating the points of the user
     let newuser="new";
     newuser = prompt("Inroduce your name");
 
     if (userScore> Score[0]){//First compare the user score with highest on the score board list
-        Names[2] = Names[0]; 
-        Score[2] = Score[0];
-        Names[1] = Names[1];    //second position on list for the old first position
-        Score[1] = Score[1];    //second position on list for the old first position
+        Names[2] = Names[1]; 
+        Score[2] = Score[1];    //Add new top score and bump down old scores
+        Names[1] = Names[0];    //second position on list for the old first position
+        Score[1] = Score[0];    //second position on list for the old first position
         Names[0] = newuser;     //first position on list for the new user
         Score[0] = userScore;   //first position on list for the new user
 
@@ -74,8 +73,6 @@ function score(){
 
     }
     else if (userScore> Score[2]){ ////we compared the user score with the last on the score board list
-        Names[2] = Names[1]; 
-        Score[2] = Score[1];
         Names[2] = newuser;     //last position on list for the new user
         Score[2] = userScore;   //last position on list for the new user
 
@@ -83,9 +80,9 @@ function score(){
     let scoreEl1 = document.querySelector("#ScoreTextID1");
     let scoreEl2 = document.querySelector("#ScoreTextID2");
     let scoreEl3 = document.querySelector("#ScoreTextID3");
-    scoreEl1.textContent = Names[0]+" "+Score[0];
-    scoreEl2.textContent = Names[1]+" "+Score[1];
-    scoreEl3.textContent = Names[2]+" "+Score[2];
+    scoreEl1.textContent = Names[0]+" "+Score[0]; //Display 1st place on scoreboard
+    scoreEl2.textContent = Names[1]+" "+Score[1]; //Display 2nd place on scoreboard
+    scoreEl3.textContent = Names[2]+" "+Score[2]; //Display 3rd place on scoreboard
 }
 
 //we pass 2 arguments to this function, the number of question and the choice
@@ -155,15 +152,16 @@ function answersLists(x){
 
 function questionandAnswer(){
     
+    //Display question on screen
     questionEl.textContent = listquestions[numberquestion];
 
-    //Make dissapear the button of the begin quiz
+    //Make the begin quiz button dissapear
     document.getElementById("buttonID").style.display = 'none';
 
-    //Show the four buttons with the different options
+    //Show the four buttons with the different options [0], [1], [2], [3]
     document.getElementsByClassName("choices")[0].style.display = 'block';
     //It change the text inside of the button
-    // (answersLists(numberquestion))[0]  get the first element of the list of answers specific for this question 
+    // (answersLists(numberquestion))[0] gets the first element of the list of answers specific for this question 
     document.getElementsByClassName("choices")[0].innerHTML = (answersLists(numberquestion))[0];
 
     document.getElementsByClassName("choices")[1].style.display = 'block';
@@ -177,7 +175,7 @@ function questionandAnswer(){
     
 }
 
-//this function make the the choices button hidden
+//this function hides the choices buttons at the end of the game 
 function hideChoicebuttons(){
     document.getElementsByClassName("choices")[0].style.display = 'none';
     document.getElementsByClassName("choices")[1].style.display = 'none';
@@ -186,18 +184,17 @@ function hideChoicebuttons(){
 }
 
 function winGame(){
-    gamesWin++;                     //Increase the toatl time of game that you have won
+    gamesWin++;  //Increases the # of times that you have won the game 
     //Make appear the button
     document.getElementById("buttonID").style.display = 'block';
     document.getElementsByClassName("buttonID").innerHTML ="Begin Quiz";
     questionEl.textContent = "";    //remove the question from the screen
-    hideChoicebuttons();           //4 choice button hidden
+    hideChoicebuttons();           //4 choice buttons hidden
     let answerEl = document.querySelector("#answer");
-    let answer="You've Won!";
-    answerEl.textContent = answer;
+    answerEl.textContent = "You've Won!";
 
     let winEl = document.querySelector("#winId");
-    winEl.textContent = "Win: "+gamesWin; //show the number of time that you have won
+    winEl.textContent = "Wins: " + gamesWin; //show the number of time that you have won
     score();  
 }
 
@@ -221,7 +218,7 @@ function startTimer() {
     // Sets timer
     timer = setInterval(function() {
         timerCount--;
-        timerElement.textContent = timerCount;
+        timerElement.textContent = timerCount;          //Display seconds left on the screen
         if ((timerCount >= 0) && (numberquestion <5)) { //If timer is not expired and the questions are not finish 
         // Tests if win condition is met
             if (isLoose === true) {                     //If we have fail on 1 question decrease the timer 5 seconds
@@ -235,8 +232,8 @@ function startTimer() {
                 questionandAnswer();                    //It returns to the question and answer function
             }
         }
-        if ((timerCount === 0) || (timerCount < 0)){   //If the timer is 0 or less tahn zero 
-                                                        //(we decrease 5 second per mistake so there is a chance that it could go below 0)
+        if ((timerCount === 0) || (timerCount < 0)){   //If the timer is 0 or less than zero 
+                                                        //(we decrease 5 second per mistake but there is a chance that it could go below 0)
             // Clears interval
             clearInterval(timer);
             timerElement.textContent = 0;               //It shows 0 on the screen timer
@@ -276,20 +273,20 @@ function init(){
     wrongAnswers=0;
     timerCount =30;
     numberquestion=0;
-    wrongEl.textContent = "Wrong answers: "+wrongAnswers;
-    winEl.textContent = "Right answers: "+rightAnswers;
+    wrongEl.textContent = "Wrong answers: " +wrongAnswers;
+    winEl.textContent = "Right answers: " +rightAnswers;
     questionandAnswer();
     startTimer();
 }
 
-//Link button start quiz with the function init
+//Link "Begin Quiz" button with the function init
 startQuiz.addEventListener("click", init);
-//Link button reset with the function reset
+//Link Reset button with the function reset
 resetEl.addEventListener("click", reset);
 
-//Link the buttons choices with checkAnswer function. We pass 2 arguments the number of the question and the user choice
+//Link Choices buttons with checkAnswer function. We pass 2 arguments: the number of the question and the user choice
 choice0.addEventListener("click", function(){
-    checkAnswers(numberquestion,0)  //Because it is the first button it pass a 0 as an argument. 
+    checkAnswers(numberquestion,0)  //Because it's the first button it'll pass a 0 as an argument. 
                                     //This means the user selected the first choice 
 });
 choice1.addEventListener("click", function(){
